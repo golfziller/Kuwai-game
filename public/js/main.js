@@ -71,7 +71,7 @@ var v = new Vue({
 
                 }
             });
-        },
+        },  
         itemSelect: function (event) {
             $('.box-dermpan a div').removeClass("select");
             var name = $(event.target).attr('name');
@@ -84,6 +84,9 @@ var v = new Vue({
             var a = $('.box-dermpan a div.select').attr('name');
             if (a == undefined || a == null) {
                 alert('Please select item bet.')
+            }
+            else if(m==null||m==undefined||m==0){
+                 alert('Please input coins !!')
             }
             else {
                 $.ajax({
