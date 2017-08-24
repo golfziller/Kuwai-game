@@ -179,11 +179,11 @@ function BetAwayProcess(recid, fid, action, name, cb) {
                     r.status = "ERROR";
                     r.content = "The pocket money is not enough to bet";
                     cb(r);
-                }/*else if(ownerid==fid){
+                }else if(ownerid==fid){
                     r.status = "ERROR";
                     r.content = "You can not bet on your own";
                     cb(r);
-                } */
+                } 
                 else {
                     var h = betrec.actionowner;
                     var a = action;
