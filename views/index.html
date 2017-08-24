@@ -1,0 +1,242 @@
+<html>
+
+<head>
+  <title>Kuwai Game</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+
+
+  <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
+
+  <link rel="shortcut icon" type='image/x-icon' href="/images/favicon.ico" />
+
+</head>
+
+<body>
+  <div class="container" id="app">
+    <div class="row" id="login">
+      <div class="col-md-12">
+        <button class="btn btn-success pull-right" v-on:click="loginFB"><i class="fa fa-sign-in"></i> Login with Facebook</button>
+      </div>
+    </div>
+    <div class="row" id="MainShow" hidden="hidden">
+      <div class="col-md-12">
+        <div class="row bg-timeline">
+          <div class="col-md-3 col-md-offset-9 box-profile">
+            <h4>
+              <ins>{{nameProfile}}</ins>
+            </h4>
+            <div class="row">
+              <div class="col-md-12">
+
+                <dl class="dl-horizontal">
+                  <dt> <i class="fa fa-trophy"></i> rank :</dt>
+                  <dd>-</dd>
+                </dl>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <dl class="dl-horizontal">
+                  <dt><i class="fa fa-bitcoin"></i> coins :</dt>
+                  <dd>{{coinsMe}}</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 ">
+                <a href="/LogOut" class="pull-right label label-info"><i class="fa fa-power-off"></i> Log out</a>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        <div class="row">
+          <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid navbar-border">
+              <div class="navbar-header">
+
+                <a class="navbar-brand " href="/"><i class="fa fa-home"></i> Home</a>
+              </div>
+
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                  <li class=""><a href="#"><i class="fa fa-exclamation"></i> Daily quest</a></li>
+                  <li class=""><a href="#"><i class="fa fa-trophy"></i> Ranking</a></li>
+                  <li class=""><a href="#"><i class="fa fa-comment-o"></i> About</a></li>
+
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1" aria-haspopup="true" aria-expanded="true"><i class="fa fa-anchor"></i> Support <span class="caret"></span></a>
+                    <ul class=" dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                      <li><a href="#"><i class="fa fa-envelope"></i> Email</a></li>
+                      <li><a href="#"><i class="fa fa-phone"></i> Phone Support</a></li>
+                      <li class="divider"></li>
+                      <li class="active"><a href="#"><i class="fa fa-credit-card"></i> Make a Payment</a></li>
+                    </ul>
+                  </li>
+
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="#"><i class="fa fa-twitter color-twitter"></i></a></li>
+                  <li><a href="#"><i class="fa fa-facebook color-facebook"></i></a></li>
+                  <li><a href="#"><i class="fa fa-linkedin color-linkedin"></i></a></li>
+                </ul>
+              </div>
+              <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+          </nav>
+
+
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="row">
+              <div class=" col-md-12">
+                <div class="box-dermpan">
+
+
+                  <div class="row">
+                    <div class="col-md-9">
+                      <a href="#">
+                        <div class="item-dermpan korn" v-on:click="itemSelect" name="HAMMER">
+                        </div>
+                      </a>
+                      <a href="#">
+                        <div class="item-dermpan gunkai" v-on:click="itemSelect" name=" SCISSORS">
+                        </div>
+                      </a>
+                      <a href="#">
+                        <div class="item-dermpan kadard" v-on:click="itemSelect" name="PAPER">
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-3" style="padding-top:30px">
+                      <input type="text" class="form-control" onkeypress="return isNumber(event)" maxlength="10" v-model="coinsDermpan" />
+
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 text-center" style="padding:10px">
+                      <a class="btn brand-lucky" v-on:click="Bet" href="#">Rich... or Poor... ??</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class=" col-md-12">
+                <div class="list-dermpan ">
+                  <div class="row">
+                    <div class="col-md-12 text-center">
+                      <h4><ins>Lucky draw</ins> </h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table class="table">
+                        <tbody>
+                          <tr v-for="item of listdermpan">
+                            <td>{{item.ownername}}</td>
+                            <td class="text-center">{{item.betcoins}}</td>
+                            <td class="text-center">
+                              <a href="#" id="HAMMER">
+                                 <img src="/images/korn.png" class="icon-size-item "  title="อันนี้ชนะ"  v-on:click="BetAway(item,'HAMMER')"/>
+                              </a>
+                              <a href="#" >
+                                <img src="/images/gunkai.png" class="icon-size-item"  title="อันนี้แพ้บ่อยนะ"  v-on:click="BetAway(item,'SCISSORS')"/>
+                               </a>
+                              <a href="#" >
+                               <img src="/images/kadard.png" class="icon-size-item"   title="อันนี้กูชอบชนะ ชัวร์"  v-on:click="BetAway(item,'PAPER')"/>
+                              </a>
+                            </td>
+
+                          </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+         <div class="row" style="margin-top:30px">
+              <div class=" col-md-12">
+                <div class="history-dermpan text-center">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h4><ins> History Games</ins></h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table class="table">
+                        <thead>
+                          <tr >
+                            <th class="text-center">Home</th>
+                            <th class="text-center">Bet</th>
+                            <th class="text-center">Away</th>
+                            <th class="text-center">Winner</th>
+                              
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="item2 in listHistory">
+                            <td>{{item2.ownername}}</td>
+                            <td>{{item2.betcoins}}</td>
+                            <td>{{item2.betername}}</td>
+                            <td>{{item2.result}}</td>
+
+                          </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <script src="/js/main.js"></script>
+
+
+
+
+
+</body>
+
+</html>

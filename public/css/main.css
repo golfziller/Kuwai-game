@@ -1,0 +1,90 @@
+  body{
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  .container{
+  
+    background-color:#f2f2f2;
+    
+  }
+  .box-profile{
+    border: 2px  solid #245796;
+    background-color:rgba(141, 221, 229, 0.63);
+    border-radius: 5px;
+    top: 20px;
+  }
+    .box-profile dt{
+   width: 100px
+  }
+  .bg-timeline{
+    background-image: url('/images/bgtimeline.jpg');
+   background-size: cover;
+   height: 300px
+
+  }
+
+
+  /*COLORS*/
+.color-red{color: #FF0000;}
+.color-green{color: #6cbc42;}
+.color-blue{color: #0080c5;}
+.color-twitter{color:#00aced;}
+.color-facebook{color:#00539f;}
+.color-linkedin{color:#0176b5;}
+
+/*NAVBAR STYLES*/
+.navbar-border{border-bottom: solid 5px #0080c5;}
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover{
+  background-color:#2a83e0;
+  color: white;
+  transition-delay: 0.1s;
+}
+
+.box-dermpan,.list-dermpan,.history-dermpan{
+ border: 9px  solid rgb(114, 95, 88);
+    background-color:rgba(141, 221, 229, 0.63);
+    border-radius: 5px;
+ 
+    padding: 10px;
+}
+  .box-dermpan{
+   height: 190px;
+  }
+  .list-dermpan{
+    margin-top: 30px; 
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .item-dermpan{
+    width: 100px;
+    height: 100px;
+   
+     margin-right: 10px;
+     float: left;   
+  }
+    .item-dermpan.select{
+      border: 3px  solid rgb(13, 101, 82);
+    } 
+  .item-dermpan:hover{
+  border-bottom: 3px  solid rgb(13, 101, 82);
+  }
+  .item-dermpan.korn{
+     background-image: url('/images/korn.png');
+  }
+.item-dermpan.gunkai{
+     background-image: url('/images/gunkai.png');
+  }
+ .item-dermpan.kadard{
+     background-image: url('/images/kadard.png');
+  }
+  .btn.brand-lucky{
+    padding:10px;
+    background-color:#8cad4d;
+    color: white;
+    border-radius:50px;
+    font-weight: bold;
+    }
+  .icon-size-item{
+    height: 30px;
+    width: 30px;
+  }
