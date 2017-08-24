@@ -195,7 +195,7 @@ function BetAwayProcess(recid, fid, action, name, cb) {
                             usergame.findOneAndUpdate({ fbid: ownerid }, { coins: total }, function () {
                                 if (err) return res.send(500, { error: err });
 
-                                betreccord.findOneAndUpdate({ _id: recid }, { beter: fid, betername: name, actionbeter: a, result: 'DRAW', uptodate: dt, status: 'COMPLETE' }, function (err, res) {
+                                betreccord.findOneAndUpdate({ _id: recid,status:'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: 'DRAW', uptodate: dt, status: 'COMPLETE' }, function (err, res) {
                                     if (err) {
                                         console.log(err);
                                     }
@@ -217,9 +217,6 @@ function BetAwayProcess(recid, fid, action, name, cb) {
 
                                 });
                             });
-
-
-
                         }
                         else if ((h == "HAMMER" && a == "SCISSORS") || (h == "SCISSORS" && a == "PAPER") || (h == "PAPER" && a == "HAMMER")) {//กรณีเจ้าบ้านชนะ
 
@@ -230,7 +227,7 @@ function BetAwayProcess(recid, fid, action, name, cb) {
                                 usergame.findOneAndUpdate({ fbid: fid }, { coins: total }, function () {
                                     if (err) return res.send(500, { error: err });
 
-                                    betreccord.findOneAndUpdate({ _id: recid }, { beter: fid, betername: name, actionbeter: a, result: ownername, uptodate: dt, status: 'COMPLETE' }, function (err, res) {
+                                    betreccord.findOneAndUpdate({ _id: recid,status:'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: ownername, uptodate: dt, status: 'COMPLETE' }, function (err, res) {
                                         if (err) {
                                             console.log(err);
                                         } else {
@@ -258,7 +255,7 @@ function BetAwayProcess(recid, fid, action, name, cb) {
                             usergame.findOneAndUpdate({ fbid: fid }, { coins: total }, function () {
                                 if (err) return res.send(500, { error: err });
 
-                                betreccord.findOneAndUpdate({ _id: recid }, { beter: fid, betername: name, actionbeter: a, result: name, uptodate: dt, status: 'COMPLETE' }, function (err, res) {
+                                betreccord.findOneAndUpdate({ _id: recid,status:'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: name, uptodate: dt, status: 'COMPLETE' }, function (err, res) {
                                     if (err) {
                                         console.log(err);
                                     } else {
@@ -349,13 +346,13 @@ function BetProcess(fid, coins, action, name, cb) {
 }
 
 function GetlistDermpan(cb) {
-    betreccord.find({ status: 'OPEN' }, function (err, recc) {
+    betreccord.find({ status: 'OPEN' },'_id ownername betcoins', function (err, recc) {
         cb(recc);
     }).sort('-createdate');
 
 }
 function GetHistory(cb) {
-    betreccord.find({ status: 'COMPLETE' }, function (err, recc) {
+    betreccord.find({ status: 'COMPLETE' },'_id ownername betcoins betername result', function (err, recc) {
         cb(recc);
     }).limit(20).sort('-uptodate');
 }
@@ -371,10 +368,7 @@ function GetCoins(fid, cb) {
         }
 
     });
-
-
 }
-
 
 
 
