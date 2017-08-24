@@ -1,6 +1,7 @@
 var express = require('express');
 
-var session = require('express-session')
+var session = require('express-session');
+
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var request = require("request");
@@ -9,7 +10,7 @@ var _ = require('lodash');
 var mongoose = require('mongoose');
 
 
-mongoose.connect('mongodb://localhost/kuwai');
+mongoose.connect('mongodb://heroku_h9w3jgln:2vufqdllf7oct1plb7dlvtmobo@dbh11.mlab.com:27117/heroku_h9w3jgln');
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
