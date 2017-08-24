@@ -80,7 +80,7 @@ var v = new Vue({
             $(".box-dermpan a div[name='" + name + "']").addClass("select");
         },
         Bet: function () {
-            var m = v.coinsDermpan;
+            var m = parseInt(v.coinsDermpan);
             var a = $('.box-dermpan a div.select').attr('name');
             if (a == undefined || a == null) {
                 alert('Please select item bet.')
