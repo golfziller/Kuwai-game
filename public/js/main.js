@@ -99,7 +99,7 @@ var v = new Vue({
                     success: function (res) {
                         //console.log(res)
                         if (res.status == 'OK') {
-                            console.log(res.datas)
+                           
                             v.listdermpan = res.datas
                             v.coinsMe = res.coins;
 
@@ -125,7 +125,7 @@ var v = new Vue({
                         action: value
                     },
                     success: function (res) {
-                        console.log(res)
+                     
                         if (res.status == 'ERROR' && res.content != null) {
                             alert(res.content);
                         }
@@ -144,7 +144,7 @@ var v = new Vue({
                     url: '/DailyQuest',
                     type: 'GET',                  
                     success: function (res) {
-                        console.log(res)
+                      
                         if (res.status == 'ERROR' && res.content != null) {
                             alert(res.content);
                         }
