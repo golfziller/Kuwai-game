@@ -47,7 +47,7 @@
     padding: 10px;
 }
   .box-dermpan{
-   height: 190px;
+  
   }
   .list-dermpan{
     margin-top: 30px; 
@@ -55,13 +55,22 @@
     overflow-x: hidden;
     overflow-y: auto;
   }
-  .item-dermpan{
+   .item-dermpan{
     width: 100px;
     height: 100px;
    
      margin-right: 10px;
      float: left;   
   }
+  @media screen and (max-width: 480px) {
+     .item-dermpan{
+    width: 70px;
+    height: 70px;   
+     margin-right: 5px;
+     float: left;   
+  }
+}
+ 
     .item-dermpan.select{
       border: 3px  solid rgb(13, 101, 82);
     } 
@@ -70,12 +79,15 @@
   }
   .item-dermpan.korn{
      background-image: url('/images/korn.png');
+     background-size: cover;
   }
 .item-dermpan.gunkai{
      background-image: url('/images/gunkai.png');
+       background-size: cover;
   }
  .item-dermpan.kadard{
      background-image: url('/images/kadard.png');
+       background-size: cover;
   }
   .btn.brand-lucky{
     padding:10px;

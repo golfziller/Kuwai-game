@@ -9,8 +9,9 @@ var request = require("request");
 var _ = require('lodash');
 var mongoose = require('mongoose');
 
-
 mongoose.connect('mongodb://heroku_h9w3jgln:2vufqdllf7oct1plb7dlvtmobo@dbh11.mlab.com:27117/heroku_h9w3jgln');
+//mongoose.connect('localhost/kuwai');
+
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -34,6 +35,12 @@ var betSchema = mongoose.Schema({
     createdate: { type: Date, default: Date.now },
     uptodate: Date,
     status: { type: String, default: 'OPEN' },
+});
+var dailySchema = mongoose.Schema({
+    recive: String,
+    coinsrecive: Number,
+    remark: String,
+    recivedate: Date,
 
 });
 
@@ -51,6 +58,7 @@ app.use(express.static(__dirname + "/public"));
 
 var usergame = mongoose.model('USERGAMES', gameSchema);
 var betreccord = mongoose.model('BETROCCORDS', betSchema);
+var dailyreccord = mongoose.model('DAILYROCCORDS', dailySchema);
 
 var server = app.listen(port, function () {
     console.log('Listening on port: ' + port);
@@ -109,18 +117,18 @@ app.get('/CheckSession', function (req, res) {
         GetCoins(req.session.fbid, function (c) {
             GetlistDermpan(function (recc) {
 
-                GetHistory(function(his){
+                GetHistory(function (his) {
                     var data = {
-                    name: req.session.name,
-                    coins: c,
-                    listdermpan: recc,
-                    history:his
-                }
-                // console.log(data)
-                res.send(data);
+                        name: req.session.name,
+                        coins: c,
+                        listdermpan: recc,
+                        history: his
+                    }
+                    // console.log(data)
+                    res.send(data);
 
                 });
-           
+
             });
 
 
@@ -158,6 +166,66 @@ app.get('/BetAway', function (req, res) {
     })
 
 });
+app.get('/DailyQuest', function (req, res) {
+    var fbid = req.session.fbid;
+    var addcoins = 500;
+    var cuurentdate = new Date();
+    cuurentdate = cuurentdate.setHours(0, 0, 0, 0);
+    var data = {
+        status: '',
+        content: '',
+        coins: ''
+    }
+    GetCoins(fbid, function (coinsMe) {
+        var total = coinsMe + addcoins;
+        CheckDailyQuest(fbid, function (result) {
+            if (result) {
+                var insert = new dailyreccord({ recive: fbid, coinsrecive: addcoins, recivedate: cuurentdate })
+                insert.save(function (err) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        usergame.findOneAndUpdate({ fbid: fbid }, { coins: total }, function () {
+                            GetCoins(fbid, function (coinsMeUpdate) {
+                                data.status = 'OK';
+                                data.content = 'Happy time add your pocket 500 coins success.';
+                                data.coins = coinsMeUpdate;
+                                res.json(data);
+
+                            });
+
+
+                        });
+                    }
+                });
+            }
+            else {
+
+                data.status = 'ERROR';
+                data.content = 'You can recive 500 coins/day.';
+                res.json(data);
+            }
+        });
+
+
+
+
+    });
+});
+function CheckDailyQuest(fbid, cb) {
+
+    dailyreccord.findOne({ recive: fbid }, function (err, drec) {
+        console.log(drec)
+        if (drec!= null && drec!=undefined) {
+             cb(false)      
+        }
+        else {
+          cb(true)            
+        }
+
+    });
+
+}
 function BetAwayProcess(recid, fid, action, name, cb) {
     var r = {
         status: '',
@@ -179,11 +247,11 @@ function BetAwayProcess(recid, fid, action, name, cb) {
                     r.status = "ERROR";
                     r.content = "The pocket money is not enough to bet";
                     cb(r);
-                }else if(ownerid==fid){
+                } else if (ownerid == fid) {
                     r.status = "ERROR";
                     r.content = "You can not bet on your own";
                     cb(r);
-                } 
+                }
                 else {
                     var h = betrec.actionowner;
                     var a = action;
@@ -193,9 +261,9 @@ function BetAwayProcess(recid, fid, action, name, cb) {
                             var total = coinowner + coinbet;
 
                             usergame.findOneAndUpdate({ fbid: ownerid }, { coins: total }, function () {
-                                if (err) return res.send(500, { error: err });
 
-                                betreccord.findOneAndUpdate({ _id: recid,status:'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: 'DRAW', uptodate: dt, status: 'COMPLETE' }, function (err, res) {
+
+                                betreccord.findOneAndUpdate({ _id: recid, status: 'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: 'DRAW', uptodate: dt, status: 'COMPLETE' }, function (err, res) {
                                     if (err) {
                                         console.log(err);
                                     }
@@ -221,13 +289,13 @@ function BetAwayProcess(recid, fid, action, name, cb) {
                         else if ((h == "HAMMER" && a == "SCISSORS") || (h == "SCISSORS" && a == "PAPER") || (h == "PAPER" && a == "HAMMER")) {//กรณีเจ้าบ้านชนะ
 
 
-                            usergame.findOneAndUpdate({ fbid: ownerid }, { coins: coinowner+(coinbet * 2) }, function () {
+                            usergame.findOneAndUpdate({ fbid: ownerid }, { coins: coinowner + (coinbet * 2) }, function () {
                                 if (err) return res.send(500, { error: err });
                                 var total = coinMe - coinbet;
                                 usergame.findOneAndUpdate({ fbid: fid }, { coins: total }, function () {
                                     if (err) return res.send(500, { error: err });
 
-                                    betreccord.findOneAndUpdate({ _id: recid,status:'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: ownername, uptodate: dt, status: 'COMPLETE' }, function (err, res) {
+                                    betreccord.findOneAndUpdate({ _id: recid, status: 'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: ownername, uptodate: dt, status: 'COMPLETE' }, function (err, res) {
                                         if (err) {
                                             console.log(err);
                                         } else {
@@ -255,7 +323,7 @@ function BetAwayProcess(recid, fid, action, name, cb) {
                             usergame.findOneAndUpdate({ fbid: fid }, { coins: total }, function () {
                                 if (err) return res.send(500, { error: err });
 
-                                betreccord.findOneAndUpdate({ _id: recid,status:'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: name, uptodate: dt, status: 'COMPLETE' }, function (err, res) {
+                                betreccord.findOneAndUpdate({ _id: recid, status: 'OPEN' }, { beter: fid, betername: name, actionbeter: a, result: name, uptodate: dt, status: 'COMPLETE' }, function (err, res) {
                                     if (err) {
                                         console.log(err);
                                     } else {
@@ -346,13 +414,13 @@ function BetProcess(fid, coins, action, name, cb) {
 }
 
 function GetlistDermpan(cb) {
-    betreccord.find({ status: 'OPEN' },'_id ownername betcoins', function (err, recc) {
+    betreccord.find({ status: 'OPEN' }, '_id ownername betcoins', function (err, recc) {
         cb(recc);
     }).sort('-createdate');
 
 }
 function GetHistory(cb) {
-    betreccord.find({ status: 'COMPLETE' },'_id ownername betcoins betername result', function (err, recc) {
+    betreccord.find({ status: 'COMPLETE' }, '_id ownername betcoins betername result', function (err, recc) {
         cb(recc);
     }).limit(20).sort('-uptodate');
 }

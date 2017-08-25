@@ -138,6 +138,23 @@ var v = new Vue({
                 });
             }
 
+        },
+        DailyQuest:function(){
+                   $.ajax({
+                    url: '/DailyQuest',
+                    type: 'GET',                  
+                    success: function (res) {
+                        console.log(res)
+                        if (res.status == 'ERROR' && res.content != null) {
+                            alert(res.content);
+                        }
+                        else {
+                          alert(res.content);
+                          v.coinsMe = res.coins;
+                           
+                        }
+                    }
+                });
         }
 
 
